@@ -1,0 +1,15 @@
+D:\Castle of Words\Castle of Words\bin\Debug\net7.0\Castle of Words.exe
+D:\Castle of Words\Castle of Words\bin\Debug\net7.0\Castle of Words.deps.json
+D:\Castle of Words\Castle of Words\bin\Debug\net7.0\Castle of Words.runtimeconfig.json
+D:\Castle of Words\Castle of Words\bin\Debug\net7.0\Castle of Words.dll
+D:\Castle of Words\Castle of Words\bin\Debug\net7.0\Castle of Words.pdb
+D:\Castle of Words\Castle of Words\obj\Debug\net7.0\Castle of Words.csproj.AssemblyReference.cache
+D:\Castle of Words\Castle of Words\obj\Debug\net7.0\Castle of Words.GeneratedMSBuildEditorConfig.editorconfig
+D:\Castle of Words\Castle of Words\obj\Debug\net7.0\Castle of Words.AssemblyInfoInputs.cache
+D:\Castle of Words\Castle of Words\obj\Debug\net7.0\Castle of Words.AssemblyInfo.cs
+D:\Castle of Words\Castle of Words\obj\Debug\net7.0\Castle of Words.csproj.CoreCompileInputs.cache
+D:\Castle of Words\Castle of Words\obj\Debug\net7.0\Castle of Words.dll
+D:\Castle of Words\Castle of Words\obj\Debug\net7.0\refint\Castle of Words.dll
+D:\Castle of Words\Castle of Words\obj\Debug\net7.0\Castle of Words.pdb
+D:\Castle of Words\Castle of Words\obj\Debug\net7.0\Castle of Words.genruntimeconfig.cache
+D:\Castle of Words\Castle of Words\obj\Debug\net7.0\ref\Castle of Words.dll
