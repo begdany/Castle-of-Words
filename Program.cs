@@ -1,4 +1,6 @@
-﻿namespace Castle_of_Words
+﻿using static System.Net.Mime.MediaTypeNames;
+
+namespace Castle_of_Words
 {
     internal class Program
     {
@@ -19,8 +21,13 @@
             
             // Объявление координат положения каретки
             int cursorPositionX = 0; // Координата X
-            int cursorPositionY = 0; // Координата Y
+            int cursorPositionY = 0; // Координата
             
+            
+            int numHistoryPath = 0; // Номер текущего пути в истории поиска
+            int maxNumHistoryPath = 10; // Максимальное число запоминаемых путей
+            string[] searchHistory = new string[maxNumHistoryPath]; // Массив с путями истории поиска
+
             // Ожидание ввода пути к файлу
             while (true)
             {
@@ -46,6 +53,55 @@
                             Console.Clear(); // Очищаем консоль
                             Console.WriteLine(sceneText); // Выводим основной текст сцены
                             Console.Write(filePath); // Выводим путь к файлу (без переноса каретки)
+                        }
+                        continue; // Переходим к считыванию следующей клавиши
+                    case ConsoleKey.UpArrow:
+                        numHistoryPath--;
+                        continue;
+                    case ConsoleKey.DownArrow:
+                        numHistoryPath++;
+                        continue;
+                    case ConsoleKey.LeftArrow:
+                        if (filePath.Length > 0)
+                        {
+                            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                        }
+                        continue;
+                    case ConsoleKey.RightArrow:
+                        
+                        continue;
+                    case ConsoleKey.Backspace:
+                        // Если длина строки больше 0
+                        if (filePath.Length > 0)
+                        {
+                            // Если позиции каретки по оси Y больше 0 и по оси X равна 0
+                            if (Console.CursorTop > 0 && Console.CursorLeft == 0)
+                            {
+                                // Сохраняем координаты каретки
+                                cursorPositionX = Console.BufferWidth - 1;
+                                cursorPositionY = Console.CursorTop - 1;
+                                Console.Clear(); // Очищаем консоль
+                                Console.WriteLine(sceneText); // Выводим основной текст сцены
+                                Console.Write(filePath); // Выводим путь к файлу (без переноса строки)
+                                // Если справка включена
+                                if (sceneHelp == true)
+                                {
+                                    Console.WriteLine(sceneHelpText); // Выводим текст справки
+                                }
+                                Console.SetCursorPosition(cursorPositionX, cursorPositionY); // Перемещаем координаты каретки
+                                Console.Write(" "); // Заменяем символ на пробел
+                            }
+                            else
+                            {
+                                // Перемещаем каретку на одну позицию влево
+                                Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                                // Заменяем символ на пробел
+                                Console.Write(" ");
+                                // Перемещаем каретку на одну позицию влево
+                                Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                            }
+                            // Удаляем символ из пути к файлу
+                            filePath = filePath.Substring(0, filePath.Length - 1);
                         }
                         continue; // Переходим к считыванию следующей клавиши
                     default: // Если нажата другая клавиша
