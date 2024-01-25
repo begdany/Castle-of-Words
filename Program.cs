@@ -21,8 +21,8 @@ namespace Castle_of_Words
             
             // Объявление координат положения каретки
             int cursorPositionX = 0; // Координата X
-            int cursorPositionY = 0; // Координата
-            
+            int cursorPositionY = 0; // Координата Y
+            int cursorPositionZ = 0; // Координата каретки в строке
             
             int numHistoryPath = 0; // Номер текущего пути в истории поиска
             int maxNumHistoryPath = 10; // Максимальное число запоминаемых путей
@@ -40,13 +40,12 @@ namespace Castle_of_Words
                         break; // Завершение считывания нажатия клавиш
                     case ConsoleKey.F1: // Нажата клавиша F1 (отображение справки)
                         sceneHelp = !sceneHelp; // Изменение состояния отображения справки
+                        // Сохраняем текущие координаты каретки
+                        cursorPositionX = Console.CursorLeft;
+                        cursorPositionY = Console.CursorTop;
                         if (sceneHelp == true) // Если отображение справки включили
                         {
                             Console.WriteLine(sceneHelpText); // Вывод текста справки текущей сцены
-                            // Перенос каретки по координатам X и Y
-                            cursorPositionX = filePath.Length % Console.BufferWidth; // Расчет координаты X (остаток от деления длины пути файла к ширине консоли)
-                            cursorPositionY = filePath.Length / Console.BufferWidth + 1; // Расчет координаты Y (отношение длины пути файла к ширине консоли без остатка (сколько строк в консоли занимает путь к файлу) + 1 строка)
-                            Console.SetCursorPosition(cursorPositionX, cursorPositionY); // Перенос каретки
                         }
                         else // Если отображение справки отключили
                         {
@@ -54,6 +53,8 @@ namespace Castle_of_Words
                             Console.WriteLine(sceneText); // Выводим основной текст сцены
                             Console.Write(filePath); // Выводим путь к файлу (без переноса каретки)
                         }
+                        // Перенос каретки по координатам X и Y
+                        Console.SetCursorPosition(cursorPositionX, cursorPositionY); // Перенос каретки
                         continue; // Переходим к считыванию следующей клавиши
                     case ConsoleKey.UpArrow:
                         numHistoryPath--;
@@ -62,20 +63,39 @@ namespace Castle_of_Words
                         numHistoryPath++;
                         continue;
                     case ConsoleKey.LeftArrow:
-                        if (filePath.Length > 0)
+                        if (cursorPositionZ > 0)
                         {
-                            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                            if (Console.CursorTop > 0 && Console.CursorLeft == 0) /////////////////////// Нужно обосновать первый 0
+                            {
+                                Console.SetCursorPosition(Console.BufferWidth - 1, Console.CursorTop - 1);
+                            }
+                            else
+                            {
+                                Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                            }
+                            cursorPositionZ--; // Уменьшаем позицию каретки в строке на 1
                         }
                         continue;
                     case ConsoleKey.RightArrow:
-                        
+                        if (cursorPositionZ < filePath.Length)
+                        {
+                            if (Console.CursorLeft == Console.BufferWidth - 1)
+                            {
+                                Console.SetCursorPosition(0, Console.CursorTop + 1);
+                            }
+                            else
+                            {
+                                Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop);
+                            }
+                            cursorPositionZ++; // Увеличиваем позицию каретки в строке на 1
+                        }
                         continue;
                     case ConsoleKey.Backspace:
-                        // Если длина строки больше 0
-                        if (filePath.Length > 0)
+                        // Если позиция каретки в строке больше 0
+                        if (cursorPositionZ > 0)
                         {
                             // Если позиции каретки по оси Y больше 0 и по оси X равна 0
-                            if (Console.CursorTop > 0 && Console.CursorLeft == 0)
+                            if (Console.CursorTop > 0 && Console.CursorLeft == 0) /////////////////////// Нужно обосновать первый 0
                             {
                                 // Сохраняем координаты каретки
                                 cursorPositionX = Console.BufferWidth - 1;
@@ -102,10 +122,18 @@ namespace Castle_of_Words
                             }
                             // Удаляем символ из пути к файлу
                             filePath = filePath.Substring(0, filePath.Length - 1);
+                            cursorPositionZ--; // Уменьшаем позицию каретки в строке на 1
                         }
                         continue; // Переходим к считыванию следующей клавиши
                     default: // Если нажата другая клавиша
+                        /*
+                        if (key.Modifiers == ConsoleModifiers.Control)
+                        {
+                            continue;   
+                        }
+                        */
                         filePath += key.KeyChar; // Запоминаем символ нажатой клавиши
+                        cursorPositionZ++; // Увеличиваем позицию каретки в строке на 1
                         Console.Write(key.KeyChar); // Выводим символ нажатой клавиши
                         // Проверка на заполнение строки консоли при отображении справки
                         if (filePath.Length % Console.BufferWidth == Console.BufferWidth - 1 && sceneHelp == true)
