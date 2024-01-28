@@ -69,10 +69,10 @@ namespace Castle_of_Words
                         Console.SetCursorPosition(cursorPositionX, cursorPositionY); // Перенос каретки
                         continue; // Переходим к считыванию следующей клавиши
                     case ConsoleKey.UpArrow:
-                        numHistoryPath--;
+
                         continue;
                     case ConsoleKey.DownArrow:
-                        numHistoryPath++;
+
                         continue;
                     case ConsoleKey.LeftArrow:
                         if (cursorPositionZ > 0)
@@ -109,40 +109,50 @@ namespace Castle_of_Words
                             // Если каретка находится внутри строки
                             if (cursorPositionZ != filePath.Length)
                             {
+                                // Уменьшаем позицию каретки в строке на 1
                                 cursorPositionZ--;
+                                // Удаляем из строки символ перед кареткой
                                 filePath = filePath.Substring(0, cursorPositionZ) + filePath.Substring(cursorPositionZ + 1);
                                 // Если каретка находится не у левой границы окна
                                 if (Console.CursorLeft == 0)
                                 {
+                                    // Запоминаем координату предыдущего символа
                                     cursorPositionX = Console.BufferWidth - 1; // Координата X
                                     cursorPositionY = Console.CursorTop - 1; // Координата Y
                                 }
+                                // Если каретка находится внутри окна
                                 else
                                 {
+                                    // Запоминаем координату предыдущего символа
                                     cursorPositionX = Console.CursorLeft - 1; // Координата X
                                     cursorPositionY = Console.CursorTop; // Координата Y
                                 }
+                                // Переносим каретку
                                 Console.SetCursorPosition(cursorPositionX, cursorPositionY);
+                                // Выводим правую часть строки
                                 Console.Write(filePath[^(filePath.Length - (cursorPositionZ))..]);
+                                // 
                                 Console.Write(' ');
+                                // Если отображение справки включено
                                 if (sceneHelp == true)
                                 {
-                                    // Если последний символ строки перешел на новую строку
-                                    if (filePath.Length % Console.BufferWidth == 0)
+                                    // Если последний символ строки перешел на предыдущую строчку окна
+                                    if (Console.CursorLeft == 1)
                                     {
-                                        // Смещаем положение справки вниз на одну строчку:
-                                        // Запоминаем в какой по счету строке расположен последний символ строки
-                                        lastCharPositionY = filePath.Length / Console.BufferWidth;
-                                        // Переносим каретку на следующую строку от последнего символа
-                                        Console.SetCursorPosition(0, lastCharPositionY + 3);
+                                        // Смещаем положение справки вверх на одну строчку:
+                                        // Запоминаем номер строки окна на которой находится курсор
+                                        lastCharPositionY = Console.CursorTop;
+                                        // Переносим каретку к началу справки
+                                        Console.SetCursorPosition(0, lastCharPositionY + 2);
                                         // Выводим пустые строки, чтобы стереть текст справки
-                                        for (int i = 0; i < 4; i++) Console.WriteLine(new string(' ', Console.BufferWidth)); // ПОЧЕМУ 4???? Как найти число строк в справке????
-                                        // Переносим каретку к последнему символу строки
-                                        Console.SetCursorPosition(0, lastCharPositionY);
+                                        for (int i = 0; i < 4; i++) Console.WriteLine(new string(' ', Console.BufferWidth)); // ПОЧЕМУ 4???? Как найти число строк в справке???? Можно будет заменить на foreach
+                                        // Переносим каретку к последней строке
+                                        Console.SetCursorPosition(0, lastCharPositionY - 1);
                                         // Выводим текст справки
                                         Console.Write(sceneHelpText);
                                     }
                                 }
+                                // Возвращаем каретку
                                 Console.SetCursorPosition(cursorPositionX, cursorPositionY);
                             }
                             // Если каретка находится в конце строки
@@ -159,8 +169,6 @@ namespace Castle_of_Words
                                     Console.SetCursorPosition(cursorPositionX, cursorPositionY);
                                     // Выводим пробел
                                     Console.Write(" ");
-                                    // Переносим каретку по новым координатам
-                                    Console.SetCursorPosition(cursorPositionX, cursorPositionY);
                                 }
                                 // Если каретка находится у правой границы окна
                                 else
@@ -184,14 +192,14 @@ namespace Castle_of_Words
                                         // Выводим текст справки
                                         Console.Write(sceneHelpText);
                                     }
-                                    // Переносим каретку по новым координатам
-                                    Console.SetCursorPosition(cursorPositionX, cursorPositionY);
                                 }
                                 // Удаляем символ из пути к файлу
                                 filePath = filePath.Substring(0, filePath.Length - 1);
                                 // Уменьшаем позицию каретки в строке на 1
                                 cursorPositionZ--;
-                            }                            
+                                // Переносим каретку по новым координатам
+                                Console.SetCursorPosition(cursorPositionX, cursorPositionY);
+                            }
                         }
                         continue; // Переходим к считыванию следующей клавиши
                     default: // Если нажата другая клавиша
