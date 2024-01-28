@@ -56,7 +56,7 @@ namespace Castle_of_Words
 
 
                             Console.SetCursorPosition(lastCharPositionX, lastCharPositionY); // Перенос каретки
-                        }                       
+                        }
                         if (sceneHelp == true) // Если отображение справки включили
                         {
                             Console.WriteLine(sceneHelpText); // Вывод текста справки текущей сцены
@@ -80,33 +80,37 @@ namespace Castle_of_Words
                         continue;
                     case ConsoleKey.DownArrow:
                         // Если каретка находится не на последней строке
-                        if (Console.CursorTop != filePath.Length / Console.BufferWidth) // Убрать деление в будущем, могут быть проблемы, если заголовок состоит из более чем 1 строки 
+                        if (Console.CursorTop != filePath.Length / Console.BufferWidth + 1) // Убрать деление в будущем, могут быть проблемы, если заголовок состоит из более чем 1 строки 
                         {
-                            // Переносим каретку на одну строку ниже
-                            Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop + 1);
-                            // Сохраняем новое положение каретки в строке
-                            cursorPositionZ += Console.BufferWidth;
-                        }
-                        // Если каретка находится на последней строке
-                        else
-                        {
-                            // Запоминаем координату последнего символа по оси X 
-                            lastCharPositionX = filePath.Length % Console.BufferWidth; // Убрать деление в будущем
-                            // Если каретка находится дальше последнего символа по оси X
-                            if (Console.CursorLeft > lastCharPositionX)
-                            {
-                                // Переносим каретку на одну строку ниже
-                                Console.SetCursorPosition(lastCharPositionX, Console.CursorTop + 1);
-                                // Сохраняем новое положение каретки в строке
-                                cursorPositionZ = filePath.Length;
-                            }
-                            // Если каретка находится ближе последнего символа по оси X
-                            else
+                            // Если каретка находится не на предпоследней строке
+                            if (Console.CursorTop != filePath.Length / Console.BufferWidth)
                             {
                                 // Переносим каретку на одну строку ниже
                                 Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop + 1);
                                 // Сохраняем новое положение каретки в строке
                                 cursorPositionZ += Console.BufferWidth;
+                            }
+                            // Если каретка находится на предпоследней строке
+                            else
+                            {
+                                // Запоминаем координату последнего символа по оси X 
+                                lastCharPositionX = filePath.Length % Console.BufferWidth; // Убрать деление в будущем
+                                // Если каретка находится дальше последнего символа по оси X
+                                if (Console.CursorLeft > lastCharPositionX)
+                                {
+                                    // Переносим каретку на одну строку ниже
+                                    Console.SetCursorPosition(lastCharPositionX, Console.CursorTop + 1);
+                                    // Сохраняем новое положение каретки в строке
+                                    cursorPositionZ = filePath.Length;
+                                }
+                                // Если каретка находится ближе последнего символа по оси X
+                                else
+                                {
+                                    // Переносим каретку на одну строку ниже
+                                    Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop + 1);
+                                    // Сохраняем новое положение каретки в строке
+                                    cursorPositionZ += Console.BufferWidth;
+                                }
                             }
                         }
                         continue;
